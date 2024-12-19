@@ -1,0 +1,2727 @@
+   0  $accept : start $end
+
+   1  start : xpath_union_expression
+
+   2  q_name : T_BARE
+
+   3  xpath_value : xpath_expression
+
+   4  xpath_expression : xp_expr
+
+   5  xpath_union_expression : xp_union_expr
+
+   6  and_operator : K_AND
+   7               | L_DAMPER
+
+   8  or_operator : K_OR
+   9              | L_DVBAR
+
+  10  equals_operator : L_EQUALS
+  11                  | L_DEQUALS
+
+  12  xp_location_path : xpc_relative_location_path
+  13                   | xp_absolute_location_path
+
+  14  xp_absolute_location_path : L_SLASH xp_relative_location_path_optional
+  15                            | xpc_abbreviated_absolute_location_path
+
+  16  xp_expr : xp_ternary_expr
+
+  17  xp_ternary_expr : xp_or_expr
+  18                  | xp_or_expr L_QUESTION xp_or_expr L_COLON xp_ternary_expr
+  19                  | xp_or_expr L_QUESTION L_COLON xp_ternary_expr
+
+  20  xp_primary_expr : L_OPAREN xpc_expr L_CPAREN
+  21                  | xpc_variable_reference
+  22                  | xpc_literal
+  23                  | xpc_number
+  24                  | xpc_function_call
+
+  25  xp_union_expr : xp_not_expr
+  26                | xp_union_expr L_VBAR xp_not_expr
+
+  27  xp_not_expr : xp_path_expr
+  28              | L_NOT xp_path_expr
+
+  29  xp_path_expr : xp_location_path
+  30               | xp_filter_expr
+  31               | xp_filter_expr L_SLASH xpc_relative_location_path
+  32               | xp_filter_expr L_DSLASH xpc_relative_location_path
+
+  33  xp_filter_expr : xp_primary_expr
+  34                 | xp_filter_expr xpc_predicate
+
+  35  xp_or_expr : xp_and_expr
+  36             | xp_or_expr or_operator xp_and_expr
+
+  37  xp_and_expr : xp_equality_expr
+  38              | xp_and_expr and_operator xp_equality_expr
+
+  39  xp_equality_expr : xp_relational_expr
+  40                   | xp_equality_expr equals_operator xp_relational_expr
+  41                   | xp_equality_expr L_NOTEQUALS xp_relational_expr
+
+  42  xp_concative_expr : xp_additive_expr
+  43                    | xp_concative_expr L_UNDERSCORE xp_additive_expr
+
+  44  xp_additive_expr : xp_multiplicative_expr
+  45                   | xp_additive_expr L_PLUS xp_multiplicative_expr
+  46                   | xp_additive_expr L_MINUS xp_multiplicative_expr
+
+  47  xp_multiplicative_expr : xp_unary_expr
+  48                         | xp_multiplicative_expr L_STAR xp_unary_expr
+  49                         | xp_multiplicative_expr K_DIV xp_unary_expr
+  50                         | xp_multiplicative_expr K_MOD xp_unary_expr
+
+  51  xp_unary_expr : xp_union_expr
+  52                | L_MINUS xp_unary_expr
+
+  53  xp_relative_location_path_optional :
+  54                                     | xpc_relative_location_path
+
+  55  xpc_function_call : T_FUNCTION_NAME L_OPAREN xpc_argument_list_optional L_CPAREN
+
+  56  xpc_argument_list_optional :
+  57                             | xpc_argument_list
+
+  58  xpc_argument_list : xpc_argument
+  59                    | xpc_argument_list L_COMMA xpc_argument
+
+  60  xpc_argument : xpath_value
+
+  61  xpc_axis_specifier_optional :
+  62                              | T_AXIS_NAME L_DCOLON
+  63                              | xpc_abbreviated_axis_specifier
+
+  64  xpc_predicate_list :
+  65                     | xpc_predicate_list xpc_predicate
+
+  66  xpc_predicate : L_OBRACK xpath_expression L_CBRACK
+
+  67  xpc_relative_location_path : xpc_step
+  68                             | xpc_relative_location_path L_SLASH xpc_step
+  69                             | xpc_abbreviated_relative_location_path
+
+  70  xpc_step : xpc_axis_specifier_optional xpc_node_test xpc_predicate_list
+  71           | xpc_abbreviated_step
+
+  72  xpc_abbreviated_absolute_location_path : L_DSLASH xpc_relative_location_path
+
+  73  xpc_abbreviated_relative_location_path : xpc_relative_location_path L_DSLASH xpc_step
+
+  74  xpc_literal : T_QUOTED
+
+  75  xpc_literal_optional :
+  76                       | xpc_literal
+
+  77  xpc_number : T_NUMBER
+
+  78  xpc_variable_reference : T_VAR
+
+  79  xpc_node_test : xpc_name_test
+  80                | xpc_node_type L_OPAREN L_CPAREN
+  81                | K_PROCESSING_INSTRUCTION L_OPAREN xpc_literal_optional L_CPAREN
+
+  82  xpc_name_test : q_name
+  83                | L_ASTERISK
+
+  84  xpc_node_type : K_COMMENT
+  85                | K_TEXT
+  86                | K_NODE
+
+  87  xpc_abbreviated_step : L_DOT
+  88                       | L_DOTDOT
+
+  89  xpc_abbreviated_axis_specifier : L_AT
+
+  90  xpc_expr : xp_expr
+
+  91  xp_relational_expr : xp_concative_expr
+  92                     | xp_relational_expr L_LESS xp_concative_expr
+  93                     | xp_relational_expr L_GRTR xp_concative_expr
+  94                     | xp_relational_expr L_LESSEQ xp_concative_expr
+  95                     | xp_relational_expr L_GRTREQ xp_concative_expr
+
+state 0
+	$accept : . start $end  (0)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	start  goto 13
+	xpath_union_expression  goto 14
+	xp_union_expr  goto 15
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 1
+	xpc_abbreviated_axis_specifier : L_AT .  (89)
+
+	.  reduce 89
+
+
+state 2
+	xpc_abbreviated_step : L_DOTDOT .  (88)
+
+	.  reduce 88
+
+
+state 3
+	xpc_abbreviated_absolute_location_path : L_DSLASH . xpc_relative_location_path  (72)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xpc_relative_location_path  goto 33
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 4
+	xp_not_expr : L_NOT . xp_path_expr  (28)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_path_expr  goto 34
+	xp_filter_expr  goto 27
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 5
+	xp_primary_expr : L_OPAREN . xpc_expr L_CPAREN  (20)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_expr  goto 36
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_ternary_expr  goto 38
+	xp_or_expr  goto 39
+	xp_primary_expr  goto 20
+	xpc_expr  goto 40
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_and_expr  goto 41
+	xp_equality_expr  goto 42
+	xp_relational_expr  goto 43
+	xp_concative_expr  goto 44
+	xp_additive_expr  goto 45
+	xp_multiplicative_expr  goto 46
+	xp_unary_expr  goto 47
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 6
+	xp_absolute_location_path : L_SLASH . xp_relative_location_path_optional  (14)
+	xp_relative_location_path_optional : .  (53)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	$end  reduce 53
+	L_COMMA  reduce 53
+	L_COLON  reduce 53
+	L_DAMPER  reduce 53
+	L_DEQUALS  reduce 53
+	L_DVBAR  reduce 53
+	L_EQUALS  reduce 53
+	L_GRTR  reduce 53
+	L_GRTREQ  reduce 53
+	L_LESS  reduce 53
+	L_LESSEQ  reduce 53
+	L_MINUS  reduce 53
+	L_NOTEQUALS  reduce 53
+	L_PLUS  reduce 53
+	L_QUESTION  reduce 53
+	L_STAR  reduce 53
+	L_UNDERSCORE  reduce 53
+	L_VBAR  reduce 53
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	K_AND  reduce 53
+	K_DIV  reduce 53
+	K_MOD  reduce 53
+	K_OR  reduce 53
+	L_ASTERISK  reduce 61
+	L_CBRACK  reduce 53
+	L_CPAREN  reduce 53
+	T_BARE  reduce 61
+
+	xpc_relative_location_path  goto 48
+	xp_relative_location_path_optional  goto 49
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 7
+	xpc_abbreviated_step : L_DOT .  (87)
+
+	.  reduce 87
+
+
+state 8
+	xpc_axis_specifier_optional : T_AXIS_NAME . L_DCOLON  (62)
+
+	L_DCOLON  shift 50
+	.  error
+
+
+state 9
+	xpc_function_call : T_FUNCTION_NAME . L_OPAREN xpc_argument_list_optional L_CPAREN  (55)
+
+	L_OPAREN  shift 51
+	.  error
+
+
+state 10
+	xpc_number : T_NUMBER .  (77)
+
+	.  reduce 77
+
+
+state 11
+	xpc_literal : T_QUOTED .  (74)
+
+	.  reduce 74
+
+
+state 12
+	xpc_variable_reference : T_VAR .  (78)
+
+	.  reduce 78
+
+
+state 13
+	$accept : start . $end  (0)
+
+	$end  accept
+
+
+state 14
+	start : xpath_union_expression .  (1)
+
+	.  reduce 1
+
+
+state 15
+	xpath_union_expression : xp_union_expr .  (5)
+	xp_union_expr : xp_union_expr . L_VBAR xp_not_expr  (26)
+
+	L_VBAR  shift 52
+	$end  reduce 5
+
+
+state 16
+	xp_path_expr : xp_location_path .  (29)
+
+	.  reduce 29
+
+
+state 17
+	xp_location_path : xpc_relative_location_path .  (12)
+	xpc_relative_location_path : xpc_relative_location_path . L_SLASH xpc_step  (68)
+	xpc_abbreviated_relative_location_path : xpc_relative_location_path . L_DSLASH xpc_step  (73)
+
+	L_DSLASH  shift 53
+	L_SLASH  shift 54
+	$end  reduce 12
+	L_COMMA  reduce 12
+	L_COLON  reduce 12
+	L_DAMPER  reduce 12
+	L_DEQUALS  reduce 12
+	L_DVBAR  reduce 12
+	L_EQUALS  reduce 12
+	L_GRTR  reduce 12
+	L_GRTREQ  reduce 12
+	L_LESS  reduce 12
+	L_LESSEQ  reduce 12
+	L_MINUS  reduce 12
+	L_NOTEQUALS  reduce 12
+	L_PLUS  reduce 12
+	L_QUESTION  reduce 12
+	L_STAR  reduce 12
+	L_UNDERSCORE  reduce 12
+	L_VBAR  reduce 12
+	K_AND  reduce 12
+	K_DIV  reduce 12
+	K_MOD  reduce 12
+	K_OR  reduce 12
+	L_CBRACK  reduce 12
+	L_CPAREN  reduce 12
+
+
+state 18
+	xp_location_path : xp_absolute_location_path .  (13)
+
+	.  reduce 13
+
+
+state 19
+	xp_absolute_location_path : xpc_abbreviated_absolute_location_path .  (15)
+
+	.  reduce 15
+
+
+state 20
+	xp_filter_expr : xp_primary_expr .  (33)
+
+	.  reduce 33
+
+
+state 21
+	xp_primary_expr : xpc_variable_reference .  (21)
+
+	.  reduce 21
+
+
+state 22
+	xp_primary_expr : xpc_literal .  (22)
+
+	.  reduce 22
+
+
+state 23
+	xp_primary_expr : xpc_number .  (23)
+
+	.  reduce 23
+
+
+state 24
+	xp_primary_expr : xpc_function_call .  (24)
+
+	.  reduce 24
+
+
+state 25
+	xp_union_expr : xp_not_expr .  (25)
+
+	.  reduce 25
+
+
+state 26
+	xp_not_expr : xp_path_expr .  (27)
+
+	.  reduce 27
+
+
+state 27
+	xp_path_expr : xp_filter_expr .  (30)
+	xp_path_expr : xp_filter_expr . L_SLASH xpc_relative_location_path  (31)
+	xp_path_expr : xp_filter_expr . L_DSLASH xpc_relative_location_path  (32)
+	xp_filter_expr : xp_filter_expr . xpc_predicate  (34)
+
+	L_DSLASH  shift 55
+	L_OBRACK  shift 56
+	L_SLASH  shift 57
+	$end  reduce 30
+	L_COMMA  reduce 30
+	L_COLON  reduce 30
+	L_DAMPER  reduce 30
+	L_DEQUALS  reduce 30
+	L_DVBAR  reduce 30
+	L_EQUALS  reduce 30
+	L_GRTR  reduce 30
+	L_GRTREQ  reduce 30
+	L_LESS  reduce 30
+	L_LESSEQ  reduce 30
+	L_MINUS  reduce 30
+	L_NOTEQUALS  reduce 30
+	L_PLUS  reduce 30
+	L_QUESTION  reduce 30
+	L_STAR  reduce 30
+	L_UNDERSCORE  reduce 30
+	L_VBAR  reduce 30
+	K_AND  reduce 30
+	K_DIV  reduce 30
+	K_MOD  reduce 30
+	K_OR  reduce 30
+	L_CBRACK  reduce 30
+	L_CPAREN  reduce 30
+
+	xpc_predicate  goto 58
+
+
+state 28
+	xpc_step : xpc_axis_specifier_optional . xpc_node_test xpc_predicate_list  (70)
+
+	K_COMMENT  shift 59
+	K_NODE  shift 60
+	K_PROCESSING_INSTRUCTION  shift 61
+	K_TEXT  shift 62
+	L_ASTERISK  shift 63
+	T_BARE  shift 64
+	.  error
+
+	q_name  goto 65
+	xpc_node_test  goto 66
+	xpc_name_test  goto 67
+	xpc_node_type  goto 68
+
+
+state 29
+	xpc_axis_specifier_optional : xpc_abbreviated_axis_specifier .  (63)
+
+	.  reduce 63
+
+
+state 30
+	xpc_relative_location_path : xpc_step .  (67)
+
+	.  reduce 67
+
+
+state 31
+	xpc_relative_location_path : xpc_abbreviated_relative_location_path .  (69)
+
+	.  reduce 69
+
+
+state 32
+	xpc_step : xpc_abbreviated_step .  (71)
+
+	.  reduce 71
+
+
+state 33
+	xpc_relative_location_path : xpc_relative_location_path . L_SLASH xpc_step  (68)
+	xpc_abbreviated_absolute_location_path : L_DSLASH xpc_relative_location_path .  (72)
+	xpc_abbreviated_relative_location_path : xpc_relative_location_path . L_DSLASH xpc_step  (73)
+
+	L_DSLASH  shift 53
+	L_SLASH  shift 54
+	$end  reduce 72
+	L_COMMA  reduce 72
+	L_COLON  reduce 72
+	L_DAMPER  reduce 72
+	L_DEQUALS  reduce 72
+	L_DVBAR  reduce 72
+	L_EQUALS  reduce 72
+	L_GRTR  reduce 72
+	L_GRTREQ  reduce 72
+	L_LESS  reduce 72
+	L_LESSEQ  reduce 72
+	L_MINUS  reduce 72
+	L_NOTEQUALS  reduce 72
+	L_PLUS  reduce 72
+	L_QUESTION  reduce 72
+	L_STAR  reduce 72
+	L_UNDERSCORE  reduce 72
+	L_VBAR  reduce 72
+	K_AND  reduce 72
+	K_DIV  reduce 72
+	K_MOD  reduce 72
+	K_OR  reduce 72
+	L_CBRACK  reduce 72
+	L_CPAREN  reduce 72
+
+
+state 34
+	xp_not_expr : L_NOT xp_path_expr .  (28)
+
+	.  reduce 28
+
+
+state 35
+	xp_unary_expr : L_MINUS . xp_unary_expr  (52)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_unary_expr  goto 69
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 36
+	xpc_expr : xp_expr .  (90)
+
+	.  reduce 90
+
+
+state 37
+	xp_union_expr : xp_union_expr . L_VBAR xp_not_expr  (26)
+	xp_unary_expr : xp_union_expr .  (51)
+
+	L_VBAR  shift 52
+	L_COMMA  reduce 51
+	L_COLON  reduce 51
+	L_DAMPER  reduce 51
+	L_DEQUALS  reduce 51
+	L_DVBAR  reduce 51
+	L_EQUALS  reduce 51
+	L_GRTR  reduce 51
+	L_GRTREQ  reduce 51
+	L_LESS  reduce 51
+	L_LESSEQ  reduce 51
+	L_MINUS  reduce 51
+	L_NOTEQUALS  reduce 51
+	L_PLUS  reduce 51
+	L_QUESTION  reduce 51
+	L_STAR  reduce 51
+	L_UNDERSCORE  reduce 51
+	K_AND  reduce 51
+	K_DIV  reduce 51
+	K_MOD  reduce 51
+	K_OR  reduce 51
+	L_CBRACK  reduce 51
+	L_CPAREN  reduce 51
+
+
+state 38
+	xp_expr : xp_ternary_expr .  (16)
+
+	.  reduce 16
+
+
+state 39
+	xp_ternary_expr : xp_or_expr .  (17)
+	xp_ternary_expr : xp_or_expr . L_QUESTION xp_or_expr L_COLON xp_ternary_expr  (18)
+	xp_ternary_expr : xp_or_expr . L_QUESTION L_COLON xp_ternary_expr  (19)
+	xp_or_expr : xp_or_expr . or_operator xp_and_expr  (36)
+
+	L_DVBAR  shift 70
+	L_QUESTION  shift 71
+	K_OR  shift 72
+	L_COMMA  reduce 17
+	L_CBRACK  reduce 17
+	L_CPAREN  reduce 17
+
+	or_operator  goto 73
+
+
+state 40
+	xp_primary_expr : L_OPAREN xpc_expr . L_CPAREN  (20)
+
+	L_CPAREN  shift 74
+	.  error
+
+
+state 41
+	xp_or_expr : xp_and_expr .  (35)
+	xp_and_expr : xp_and_expr . and_operator xp_equality_expr  (38)
+
+	L_DAMPER  shift 75
+	K_AND  shift 76
+	L_COMMA  reduce 35
+	L_COLON  reduce 35
+	L_DVBAR  reduce 35
+	L_QUESTION  reduce 35
+	K_OR  reduce 35
+	L_CBRACK  reduce 35
+	L_CPAREN  reduce 35
+
+	and_operator  goto 77
+
+
+state 42
+	xp_and_expr : xp_equality_expr .  (37)
+	xp_equality_expr : xp_equality_expr . equals_operator xp_relational_expr  (40)
+	xp_equality_expr : xp_equality_expr . L_NOTEQUALS xp_relational_expr  (41)
+
+	L_DEQUALS  shift 78
+	L_EQUALS  shift 79
+	L_NOTEQUALS  shift 80
+	L_COMMA  reduce 37
+	L_COLON  reduce 37
+	L_DAMPER  reduce 37
+	L_DVBAR  reduce 37
+	L_QUESTION  reduce 37
+	K_AND  reduce 37
+	K_OR  reduce 37
+	L_CBRACK  reduce 37
+	L_CPAREN  reduce 37
+
+	equals_operator  goto 81
+
+
+state 43
+	xp_equality_expr : xp_relational_expr .  (39)
+	xp_relational_expr : xp_relational_expr . L_LESS xp_concative_expr  (92)
+	xp_relational_expr : xp_relational_expr . L_GRTR xp_concative_expr  (93)
+	xp_relational_expr : xp_relational_expr . L_LESSEQ xp_concative_expr  (94)
+	xp_relational_expr : xp_relational_expr . L_GRTREQ xp_concative_expr  (95)
+
+	L_GRTR  shift 82
+	L_GRTREQ  shift 83
+	L_LESS  shift 84
+	L_LESSEQ  shift 85
+	L_COMMA  reduce 39
+	L_COLON  reduce 39
+	L_DAMPER  reduce 39
+	L_DEQUALS  reduce 39
+	L_DVBAR  reduce 39
+	L_EQUALS  reduce 39
+	L_NOTEQUALS  reduce 39
+	L_QUESTION  reduce 39
+	K_AND  reduce 39
+	K_OR  reduce 39
+	L_CBRACK  reduce 39
+	L_CPAREN  reduce 39
+
+
+state 44
+	xp_concative_expr : xp_concative_expr . L_UNDERSCORE xp_additive_expr  (43)
+	xp_relational_expr : xp_concative_expr .  (91)
+
+	L_UNDERSCORE  shift 86
+	L_COMMA  reduce 91
+	L_COLON  reduce 91
+	L_DAMPER  reduce 91
+	L_DEQUALS  reduce 91
+	L_DVBAR  reduce 91
+	L_EQUALS  reduce 91
+	L_GRTR  reduce 91
+	L_GRTREQ  reduce 91
+	L_LESS  reduce 91
+	L_LESSEQ  reduce 91
+	L_NOTEQUALS  reduce 91
+	L_QUESTION  reduce 91
+	K_AND  reduce 91
+	K_OR  reduce 91
+	L_CBRACK  reduce 91
+	L_CPAREN  reduce 91
+
+
+state 45
+	xp_concative_expr : xp_additive_expr .  (42)
+	xp_additive_expr : xp_additive_expr . L_PLUS xp_multiplicative_expr  (45)
+	xp_additive_expr : xp_additive_expr . L_MINUS xp_multiplicative_expr  (46)
+
+	L_MINUS  shift 87
+	L_PLUS  shift 88
+	L_COMMA  reduce 42
+	L_COLON  reduce 42
+	L_DAMPER  reduce 42
+	L_DEQUALS  reduce 42
+	L_DVBAR  reduce 42
+	L_EQUALS  reduce 42
+	L_GRTR  reduce 42
+	L_GRTREQ  reduce 42
+	L_LESS  reduce 42
+	L_LESSEQ  reduce 42
+	L_NOTEQUALS  reduce 42
+	L_QUESTION  reduce 42
+	L_UNDERSCORE  reduce 42
+	K_AND  reduce 42
+	K_OR  reduce 42
+	L_CBRACK  reduce 42
+	L_CPAREN  reduce 42
+
+
+state 46
+	xp_additive_expr : xp_multiplicative_expr .  (44)
+	xp_multiplicative_expr : xp_multiplicative_expr . L_STAR xp_unary_expr  (48)
+	xp_multiplicative_expr : xp_multiplicative_expr . K_DIV xp_unary_expr  (49)
+	xp_multiplicative_expr : xp_multiplicative_expr . K_MOD xp_unary_expr  (50)
+
+	L_STAR  shift 89
+	K_DIV  shift 90
+	K_MOD  shift 91
+	L_COMMA  reduce 44
+	L_COLON  reduce 44
+	L_DAMPER  reduce 44
+	L_DEQUALS  reduce 44
+	L_DVBAR  reduce 44
+	L_EQUALS  reduce 44
+	L_GRTR  reduce 44
+	L_GRTREQ  reduce 44
+	L_LESS  reduce 44
+	L_LESSEQ  reduce 44
+	L_MINUS  reduce 44
+	L_NOTEQUALS  reduce 44
+	L_PLUS  reduce 44
+	L_QUESTION  reduce 44
+	L_UNDERSCORE  reduce 44
+	K_AND  reduce 44
+	K_OR  reduce 44
+	L_CBRACK  reduce 44
+	L_CPAREN  reduce 44
+
+
+state 47
+	xp_multiplicative_expr : xp_unary_expr .  (47)
+
+	.  reduce 47
+
+
+state 48
+	xp_relative_location_path_optional : xpc_relative_location_path .  (54)
+	xpc_relative_location_path : xpc_relative_location_path . L_SLASH xpc_step  (68)
+	xpc_abbreviated_relative_location_path : xpc_relative_location_path . L_DSLASH xpc_step  (73)
+
+	L_DSLASH  shift 53
+	L_SLASH  shift 54
+	$end  reduce 54
+	L_COMMA  reduce 54
+	L_COLON  reduce 54
+	L_DAMPER  reduce 54
+	L_DEQUALS  reduce 54
+	L_DVBAR  reduce 54
+	L_EQUALS  reduce 54
+	L_GRTR  reduce 54
+	L_GRTREQ  reduce 54
+	L_LESS  reduce 54
+	L_LESSEQ  reduce 54
+	L_MINUS  reduce 54
+	L_NOTEQUALS  reduce 54
+	L_PLUS  reduce 54
+	L_QUESTION  reduce 54
+	L_STAR  reduce 54
+	L_UNDERSCORE  reduce 54
+	L_VBAR  reduce 54
+	K_AND  reduce 54
+	K_DIV  reduce 54
+	K_MOD  reduce 54
+	K_OR  reduce 54
+	L_CBRACK  reduce 54
+	L_CPAREN  reduce 54
+
+
+state 49
+	xp_absolute_location_path : L_SLASH xp_relative_location_path_optional .  (14)
+
+	.  reduce 14
+
+
+state 50
+	xpc_axis_specifier_optional : T_AXIS_NAME L_DCOLON .  (62)
+
+	.  reduce 62
+
+
+state 51
+	xpc_function_call : T_FUNCTION_NAME L_OPAREN . xpc_argument_list_optional L_CPAREN  (55)
+	xpc_argument_list_optional : .  (56)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	L_CPAREN  reduce 56
+	T_BARE  reduce 61
+
+	xpath_value  goto 92
+	xpath_expression  goto 93
+	xp_expr  goto 94
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_ternary_expr  goto 38
+	xp_or_expr  goto 39
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_and_expr  goto 41
+	xp_equality_expr  goto 42
+	xp_relational_expr  goto 43
+	xp_concative_expr  goto 44
+	xp_additive_expr  goto 45
+	xp_multiplicative_expr  goto 46
+	xp_unary_expr  goto 47
+	xpc_argument_list_optional  goto 95
+	xpc_argument_list  goto 96
+	xpc_argument  goto 97
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 52
+	xp_union_expr : xp_union_expr L_VBAR . xp_not_expr  (26)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 98
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 53
+	xpc_abbreviated_relative_location_path : xpc_relative_location_path L_DSLASH . xpc_step  (73)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 99
+	xpc_abbreviated_step  goto 32
+
+
+state 54
+	xpc_relative_location_path : xpc_relative_location_path L_SLASH . xpc_step  (68)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 100
+	xpc_abbreviated_step  goto 32
+
+
+state 55
+	xp_path_expr : xp_filter_expr L_DSLASH . xpc_relative_location_path  (32)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xpc_relative_location_path  goto 101
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 56
+	xpc_predicate : L_OBRACK . xpath_expression L_CBRACK  (66)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xpath_expression  goto 102
+	xp_expr  goto 94
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_ternary_expr  goto 38
+	xp_or_expr  goto 39
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_and_expr  goto 41
+	xp_equality_expr  goto 42
+	xp_relational_expr  goto 43
+	xp_concative_expr  goto 44
+	xp_additive_expr  goto 45
+	xp_multiplicative_expr  goto 46
+	xp_unary_expr  goto 47
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 57
+	xp_path_expr : xp_filter_expr L_SLASH . xpc_relative_location_path  (31)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xpc_relative_location_path  goto 103
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 58
+	xp_filter_expr : xp_filter_expr xpc_predicate .  (34)
+
+	.  reduce 34
+
+
+state 59
+	xpc_node_type : K_COMMENT .  (84)
+
+	.  reduce 84
+
+
+state 60
+	xpc_node_type : K_NODE .  (86)
+
+	.  reduce 86
+
+
+state 61
+	xpc_node_test : K_PROCESSING_INSTRUCTION . L_OPAREN xpc_literal_optional L_CPAREN  (81)
+
+	L_OPAREN  shift 104
+	.  error
+
+
+state 62
+	xpc_node_type : K_TEXT .  (85)
+
+	.  reduce 85
+
+
+state 63
+	xpc_name_test : L_ASTERISK .  (83)
+
+	.  reduce 83
+
+
+state 64
+	q_name : T_BARE .  (2)
+
+	.  reduce 2
+
+
+state 65
+	xpc_name_test : q_name .  (82)
+
+	.  reduce 82
+
+
+state 66
+	xpc_step : xpc_axis_specifier_optional xpc_node_test . xpc_predicate_list  (70)
+	xpc_predicate_list : .  (64)
+
+	.  reduce 64
+
+	xpc_predicate_list  goto 105
+
+
+state 67
+	xpc_node_test : xpc_name_test .  (79)
+
+	.  reduce 79
+
+
+state 68
+	xpc_node_test : xpc_node_type . L_OPAREN L_CPAREN  (80)
+
+	L_OPAREN  shift 106
+	.  error
+
+
+state 69
+	xp_unary_expr : L_MINUS xp_unary_expr .  (52)
+
+	.  reduce 52
+
+
+state 70
+	or_operator : L_DVBAR .  (9)
+
+	.  reduce 9
+
+
+state 71
+	xp_ternary_expr : xp_or_expr L_QUESTION . xp_or_expr L_COLON xp_ternary_expr  (18)
+	xp_ternary_expr : xp_or_expr L_QUESTION . L_COLON xp_ternary_expr  (19)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_COLON  shift 107
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_or_expr  goto 108
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_and_expr  goto 41
+	xp_equality_expr  goto 42
+	xp_relational_expr  goto 43
+	xp_concative_expr  goto 44
+	xp_additive_expr  goto 45
+	xp_multiplicative_expr  goto 46
+	xp_unary_expr  goto 47
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 72
+	or_operator : K_OR .  (8)
+
+	.  reduce 8
+
+
+state 73
+	xp_or_expr : xp_or_expr or_operator . xp_and_expr  (36)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_and_expr  goto 109
+	xp_equality_expr  goto 42
+	xp_relational_expr  goto 43
+	xp_concative_expr  goto 44
+	xp_additive_expr  goto 45
+	xp_multiplicative_expr  goto 46
+	xp_unary_expr  goto 47
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 74
+	xp_primary_expr : L_OPAREN xpc_expr L_CPAREN .  (20)
+
+	.  reduce 20
+
+
+state 75
+	and_operator : L_DAMPER .  (7)
+
+	.  reduce 7
+
+
+state 76
+	and_operator : K_AND .  (6)
+
+	.  reduce 6
+
+
+state 77
+	xp_and_expr : xp_and_expr and_operator . xp_equality_expr  (38)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_equality_expr  goto 110
+	xp_relational_expr  goto 43
+	xp_concative_expr  goto 44
+	xp_additive_expr  goto 45
+	xp_multiplicative_expr  goto 46
+	xp_unary_expr  goto 47
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 78
+	equals_operator : L_DEQUALS .  (11)
+
+	.  reduce 11
+
+
+state 79
+	equals_operator : L_EQUALS .  (10)
+
+	.  reduce 10
+
+
+state 80
+	xp_equality_expr : xp_equality_expr L_NOTEQUALS . xp_relational_expr  (41)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_relational_expr  goto 111
+	xp_concative_expr  goto 44
+	xp_additive_expr  goto 45
+	xp_multiplicative_expr  goto 46
+	xp_unary_expr  goto 47
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 81
+	xp_equality_expr : xp_equality_expr equals_operator . xp_relational_expr  (40)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_relational_expr  goto 112
+	xp_concative_expr  goto 44
+	xp_additive_expr  goto 45
+	xp_multiplicative_expr  goto 46
+	xp_unary_expr  goto 47
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 82
+	xp_relational_expr : xp_relational_expr L_GRTR . xp_concative_expr  (93)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_concative_expr  goto 113
+	xp_additive_expr  goto 45
+	xp_multiplicative_expr  goto 46
+	xp_unary_expr  goto 47
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 83
+	xp_relational_expr : xp_relational_expr L_GRTREQ . xp_concative_expr  (95)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_concative_expr  goto 114
+	xp_additive_expr  goto 45
+	xp_multiplicative_expr  goto 46
+	xp_unary_expr  goto 47
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 84
+	xp_relational_expr : xp_relational_expr L_LESS . xp_concative_expr  (92)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_concative_expr  goto 115
+	xp_additive_expr  goto 45
+	xp_multiplicative_expr  goto 46
+	xp_unary_expr  goto 47
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 85
+	xp_relational_expr : xp_relational_expr L_LESSEQ . xp_concative_expr  (94)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_concative_expr  goto 116
+	xp_additive_expr  goto 45
+	xp_multiplicative_expr  goto 46
+	xp_unary_expr  goto 47
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 86
+	xp_concative_expr : xp_concative_expr L_UNDERSCORE . xp_additive_expr  (43)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_additive_expr  goto 117
+	xp_multiplicative_expr  goto 46
+	xp_unary_expr  goto 47
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 87
+	xp_additive_expr : xp_additive_expr L_MINUS . xp_multiplicative_expr  (46)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_multiplicative_expr  goto 118
+	xp_unary_expr  goto 47
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 88
+	xp_additive_expr : xp_additive_expr L_PLUS . xp_multiplicative_expr  (45)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_multiplicative_expr  goto 119
+	xp_unary_expr  goto 47
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 89
+	xp_multiplicative_expr : xp_multiplicative_expr L_STAR . xp_unary_expr  (48)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_unary_expr  goto 120
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 90
+	xp_multiplicative_expr : xp_multiplicative_expr K_DIV . xp_unary_expr  (49)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_unary_expr  goto 121
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 91
+	xp_multiplicative_expr : xp_multiplicative_expr K_MOD . xp_unary_expr  (50)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_unary_expr  goto 122
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 92
+	xpc_argument : xpath_value .  (60)
+
+	.  reduce 60
+
+
+state 93
+	xpath_value : xpath_expression .  (3)
+
+	.  reduce 3
+
+
+state 94
+	xpath_expression : xp_expr .  (4)
+
+	.  reduce 4
+
+
+state 95
+	xpc_function_call : T_FUNCTION_NAME L_OPAREN xpc_argument_list_optional . L_CPAREN  (55)
+
+	L_CPAREN  shift 123
+	.  error
+
+
+state 96
+	xpc_argument_list_optional : xpc_argument_list .  (57)
+	xpc_argument_list : xpc_argument_list . L_COMMA xpc_argument  (59)
+
+	L_COMMA  shift 124
+	L_CPAREN  reduce 57
+
+
+state 97
+	xpc_argument_list : xpc_argument .  (58)
+
+	.  reduce 58
+
+
+state 98
+	xp_union_expr : xp_union_expr L_VBAR xp_not_expr .  (26)
+
+	.  reduce 26
+
+
+state 99
+	xpc_abbreviated_relative_location_path : xpc_relative_location_path L_DSLASH xpc_step .  (73)
+
+	.  reduce 73
+
+
+state 100
+	xpc_relative_location_path : xpc_relative_location_path L_SLASH xpc_step .  (68)
+
+	.  reduce 68
+
+
+state 101
+	xp_path_expr : xp_filter_expr L_DSLASH xpc_relative_location_path .  (32)
+	xpc_relative_location_path : xpc_relative_location_path . L_SLASH xpc_step  (68)
+	xpc_abbreviated_relative_location_path : xpc_relative_location_path . L_DSLASH xpc_step  (73)
+
+	L_DSLASH  shift 53
+	L_SLASH  shift 54
+	$end  reduce 32
+	L_COMMA  reduce 32
+	L_COLON  reduce 32
+	L_DAMPER  reduce 32
+	L_DEQUALS  reduce 32
+	L_DVBAR  reduce 32
+	L_EQUALS  reduce 32
+	L_GRTR  reduce 32
+	L_GRTREQ  reduce 32
+	L_LESS  reduce 32
+	L_LESSEQ  reduce 32
+	L_MINUS  reduce 32
+	L_NOTEQUALS  reduce 32
+	L_PLUS  reduce 32
+	L_QUESTION  reduce 32
+	L_STAR  reduce 32
+	L_UNDERSCORE  reduce 32
+	L_VBAR  reduce 32
+	K_AND  reduce 32
+	K_DIV  reduce 32
+	K_MOD  reduce 32
+	K_OR  reduce 32
+	L_CBRACK  reduce 32
+	L_CPAREN  reduce 32
+
+
+state 102
+	xpc_predicate : L_OBRACK xpath_expression . L_CBRACK  (66)
+
+	L_CBRACK  shift 125
+	.  error
+
+
+state 103
+	xp_path_expr : xp_filter_expr L_SLASH xpc_relative_location_path .  (31)
+	xpc_relative_location_path : xpc_relative_location_path . L_SLASH xpc_step  (68)
+	xpc_abbreviated_relative_location_path : xpc_relative_location_path . L_DSLASH xpc_step  (73)
+
+	L_DSLASH  shift 53
+	L_SLASH  shift 54
+	$end  reduce 31
+	L_COMMA  reduce 31
+	L_COLON  reduce 31
+	L_DAMPER  reduce 31
+	L_DEQUALS  reduce 31
+	L_DVBAR  reduce 31
+	L_EQUALS  reduce 31
+	L_GRTR  reduce 31
+	L_GRTREQ  reduce 31
+	L_LESS  reduce 31
+	L_LESSEQ  reduce 31
+	L_MINUS  reduce 31
+	L_NOTEQUALS  reduce 31
+	L_PLUS  reduce 31
+	L_QUESTION  reduce 31
+	L_STAR  reduce 31
+	L_UNDERSCORE  reduce 31
+	L_VBAR  reduce 31
+	K_AND  reduce 31
+	K_DIV  reduce 31
+	K_MOD  reduce 31
+	K_OR  reduce 31
+	L_CBRACK  reduce 31
+	L_CPAREN  reduce 31
+
+
+state 104
+	xpc_node_test : K_PROCESSING_INSTRUCTION L_OPAREN . xpc_literal_optional L_CPAREN  (81)
+	xpc_literal_optional : .  (75)
+
+	T_QUOTED  shift 11
+	L_CPAREN  reduce 75
+
+	xpc_literal  goto 126
+	xpc_literal_optional  goto 127
+
+
+state 105
+	xpc_predicate_list : xpc_predicate_list . xpc_predicate  (65)
+	xpc_step : xpc_axis_specifier_optional xpc_node_test xpc_predicate_list .  (70)
+
+	L_OBRACK  shift 56
+	$end  reduce 70
+	L_COMMA  reduce 70
+	L_COLON  reduce 70
+	L_DAMPER  reduce 70
+	L_DEQUALS  reduce 70
+	L_DSLASH  reduce 70
+	L_DVBAR  reduce 70
+	L_EQUALS  reduce 70
+	L_GRTR  reduce 70
+	L_GRTREQ  reduce 70
+	L_LESS  reduce 70
+	L_LESSEQ  reduce 70
+	L_MINUS  reduce 70
+	L_NOTEQUALS  reduce 70
+	L_PLUS  reduce 70
+	L_QUESTION  reduce 70
+	L_SLASH  reduce 70
+	L_STAR  reduce 70
+	L_UNDERSCORE  reduce 70
+	L_VBAR  reduce 70
+	K_AND  reduce 70
+	K_DIV  reduce 70
+	K_MOD  reduce 70
+	K_OR  reduce 70
+	L_CBRACK  reduce 70
+	L_CPAREN  reduce 70
+
+	xpc_predicate  goto 128
+
+
+state 106
+	xpc_node_test : xpc_node_type L_OPAREN . L_CPAREN  (80)
+
+	L_CPAREN  shift 129
+	.  error
+
+
+state 107
+	xp_ternary_expr : xp_or_expr L_QUESTION L_COLON . xp_ternary_expr  (19)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_ternary_expr  goto 130
+	xp_or_expr  goto 39
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_and_expr  goto 41
+	xp_equality_expr  goto 42
+	xp_relational_expr  goto 43
+	xp_concative_expr  goto 44
+	xp_additive_expr  goto 45
+	xp_multiplicative_expr  goto 46
+	xp_unary_expr  goto 47
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 108
+	xp_ternary_expr : xp_or_expr L_QUESTION xp_or_expr . L_COLON xp_ternary_expr  (18)
+	xp_or_expr : xp_or_expr . or_operator xp_and_expr  (36)
+
+	L_COLON  shift 131
+	L_DVBAR  shift 70
+	K_OR  shift 72
+	.  error
+
+	or_operator  goto 73
+
+
+state 109
+	xp_or_expr : xp_or_expr or_operator xp_and_expr .  (36)
+	xp_and_expr : xp_and_expr . and_operator xp_equality_expr  (38)
+
+	L_DAMPER  shift 75
+	K_AND  shift 76
+	L_COMMA  reduce 36
+	L_COLON  reduce 36
+	L_DVBAR  reduce 36
+	L_QUESTION  reduce 36
+	K_OR  reduce 36
+	L_CBRACK  reduce 36
+	L_CPAREN  reduce 36
+
+	and_operator  goto 77
+
+
+state 110
+	xp_and_expr : xp_and_expr and_operator xp_equality_expr .  (38)
+	xp_equality_expr : xp_equality_expr . equals_operator xp_relational_expr  (40)
+	xp_equality_expr : xp_equality_expr . L_NOTEQUALS xp_relational_expr  (41)
+
+	L_DEQUALS  shift 78
+	L_EQUALS  shift 79
+	L_NOTEQUALS  shift 80
+	L_COMMA  reduce 38
+	L_COLON  reduce 38
+	L_DAMPER  reduce 38
+	L_DVBAR  reduce 38
+	L_QUESTION  reduce 38
+	K_AND  reduce 38
+	K_OR  reduce 38
+	L_CBRACK  reduce 38
+	L_CPAREN  reduce 38
+
+	equals_operator  goto 81
+
+
+state 111
+	xp_equality_expr : xp_equality_expr L_NOTEQUALS xp_relational_expr .  (41)
+	xp_relational_expr : xp_relational_expr . L_LESS xp_concative_expr  (92)
+	xp_relational_expr : xp_relational_expr . L_GRTR xp_concative_expr  (93)
+	xp_relational_expr : xp_relational_expr . L_LESSEQ xp_concative_expr  (94)
+	xp_relational_expr : xp_relational_expr . L_GRTREQ xp_concative_expr  (95)
+
+	L_GRTR  shift 82
+	L_GRTREQ  shift 83
+	L_LESS  shift 84
+	L_LESSEQ  shift 85
+	L_COMMA  reduce 41
+	L_COLON  reduce 41
+	L_DAMPER  reduce 41
+	L_DEQUALS  reduce 41
+	L_DVBAR  reduce 41
+	L_EQUALS  reduce 41
+	L_NOTEQUALS  reduce 41
+	L_QUESTION  reduce 41
+	K_AND  reduce 41
+	K_OR  reduce 41
+	L_CBRACK  reduce 41
+	L_CPAREN  reduce 41
+
+
+state 112
+	xp_equality_expr : xp_equality_expr equals_operator xp_relational_expr .  (40)
+	xp_relational_expr : xp_relational_expr . L_LESS xp_concative_expr  (92)
+	xp_relational_expr : xp_relational_expr . L_GRTR xp_concative_expr  (93)
+	xp_relational_expr : xp_relational_expr . L_LESSEQ xp_concative_expr  (94)
+	xp_relational_expr : xp_relational_expr . L_GRTREQ xp_concative_expr  (95)
+
+	L_GRTR  shift 82
+	L_GRTREQ  shift 83
+	L_LESS  shift 84
+	L_LESSEQ  shift 85
+	L_COMMA  reduce 40
+	L_COLON  reduce 40
+	L_DAMPER  reduce 40
+	L_DEQUALS  reduce 40
+	L_DVBAR  reduce 40
+	L_EQUALS  reduce 40
+	L_NOTEQUALS  reduce 40
+	L_QUESTION  reduce 40
+	K_AND  reduce 40
+	K_OR  reduce 40
+	L_CBRACK  reduce 40
+	L_CPAREN  reduce 40
+
+
+state 113
+	xp_concative_expr : xp_concative_expr . L_UNDERSCORE xp_additive_expr  (43)
+	xp_relational_expr : xp_relational_expr L_GRTR xp_concative_expr .  (93)
+
+	L_UNDERSCORE  shift 86
+	L_COMMA  reduce 93
+	L_COLON  reduce 93
+	L_DAMPER  reduce 93
+	L_DEQUALS  reduce 93
+	L_DVBAR  reduce 93
+	L_EQUALS  reduce 93
+	L_GRTR  reduce 93
+	L_GRTREQ  reduce 93
+	L_LESS  reduce 93
+	L_LESSEQ  reduce 93
+	L_NOTEQUALS  reduce 93
+	L_QUESTION  reduce 93
+	K_AND  reduce 93
+	K_OR  reduce 93
+	L_CBRACK  reduce 93
+	L_CPAREN  reduce 93
+
+
+state 114
+	xp_concative_expr : xp_concative_expr . L_UNDERSCORE xp_additive_expr  (43)
+	xp_relational_expr : xp_relational_expr L_GRTREQ xp_concative_expr .  (95)
+
+	L_UNDERSCORE  shift 86
+	L_COMMA  reduce 95
+	L_COLON  reduce 95
+	L_DAMPER  reduce 95
+	L_DEQUALS  reduce 95
+	L_DVBAR  reduce 95
+	L_EQUALS  reduce 95
+	L_GRTR  reduce 95
+	L_GRTREQ  reduce 95
+	L_LESS  reduce 95
+	L_LESSEQ  reduce 95
+	L_NOTEQUALS  reduce 95
+	L_QUESTION  reduce 95
+	K_AND  reduce 95
+	K_OR  reduce 95
+	L_CBRACK  reduce 95
+	L_CPAREN  reduce 95
+
+
+state 115
+	xp_concative_expr : xp_concative_expr . L_UNDERSCORE xp_additive_expr  (43)
+	xp_relational_expr : xp_relational_expr L_LESS xp_concative_expr .  (92)
+
+	L_UNDERSCORE  shift 86
+	L_COMMA  reduce 92
+	L_COLON  reduce 92
+	L_DAMPER  reduce 92
+	L_DEQUALS  reduce 92
+	L_DVBAR  reduce 92
+	L_EQUALS  reduce 92
+	L_GRTR  reduce 92
+	L_GRTREQ  reduce 92
+	L_LESS  reduce 92
+	L_LESSEQ  reduce 92
+	L_NOTEQUALS  reduce 92
+	L_QUESTION  reduce 92
+	K_AND  reduce 92
+	K_OR  reduce 92
+	L_CBRACK  reduce 92
+	L_CPAREN  reduce 92
+
+
+state 116
+	xp_concative_expr : xp_concative_expr . L_UNDERSCORE xp_additive_expr  (43)
+	xp_relational_expr : xp_relational_expr L_LESSEQ xp_concative_expr .  (94)
+
+	L_UNDERSCORE  shift 86
+	L_COMMA  reduce 94
+	L_COLON  reduce 94
+	L_DAMPER  reduce 94
+	L_DEQUALS  reduce 94
+	L_DVBAR  reduce 94
+	L_EQUALS  reduce 94
+	L_GRTR  reduce 94
+	L_GRTREQ  reduce 94
+	L_LESS  reduce 94
+	L_LESSEQ  reduce 94
+	L_NOTEQUALS  reduce 94
+	L_QUESTION  reduce 94
+	K_AND  reduce 94
+	K_OR  reduce 94
+	L_CBRACK  reduce 94
+	L_CPAREN  reduce 94
+
+
+state 117
+	xp_concative_expr : xp_concative_expr L_UNDERSCORE xp_additive_expr .  (43)
+	xp_additive_expr : xp_additive_expr . L_PLUS xp_multiplicative_expr  (45)
+	xp_additive_expr : xp_additive_expr . L_MINUS xp_multiplicative_expr  (46)
+
+	L_MINUS  shift 87
+	L_PLUS  shift 88
+	L_COMMA  reduce 43
+	L_COLON  reduce 43
+	L_DAMPER  reduce 43
+	L_DEQUALS  reduce 43
+	L_DVBAR  reduce 43
+	L_EQUALS  reduce 43
+	L_GRTR  reduce 43
+	L_GRTREQ  reduce 43
+	L_LESS  reduce 43
+	L_LESSEQ  reduce 43
+	L_NOTEQUALS  reduce 43
+	L_QUESTION  reduce 43
+	L_UNDERSCORE  reduce 43
+	K_AND  reduce 43
+	K_OR  reduce 43
+	L_CBRACK  reduce 43
+	L_CPAREN  reduce 43
+
+
+state 118
+	xp_additive_expr : xp_additive_expr L_MINUS xp_multiplicative_expr .  (46)
+	xp_multiplicative_expr : xp_multiplicative_expr . L_STAR xp_unary_expr  (48)
+	xp_multiplicative_expr : xp_multiplicative_expr . K_DIV xp_unary_expr  (49)
+	xp_multiplicative_expr : xp_multiplicative_expr . K_MOD xp_unary_expr  (50)
+
+	L_STAR  shift 89
+	K_DIV  shift 90
+	K_MOD  shift 91
+	L_COMMA  reduce 46
+	L_COLON  reduce 46
+	L_DAMPER  reduce 46
+	L_DEQUALS  reduce 46
+	L_DVBAR  reduce 46
+	L_EQUALS  reduce 46
+	L_GRTR  reduce 46
+	L_GRTREQ  reduce 46
+	L_LESS  reduce 46
+	L_LESSEQ  reduce 46
+	L_MINUS  reduce 46
+	L_NOTEQUALS  reduce 46
+	L_PLUS  reduce 46
+	L_QUESTION  reduce 46
+	L_UNDERSCORE  reduce 46
+	K_AND  reduce 46
+	K_OR  reduce 46
+	L_CBRACK  reduce 46
+	L_CPAREN  reduce 46
+
+
+state 119
+	xp_additive_expr : xp_additive_expr L_PLUS xp_multiplicative_expr .  (45)
+	xp_multiplicative_expr : xp_multiplicative_expr . L_STAR xp_unary_expr  (48)
+	xp_multiplicative_expr : xp_multiplicative_expr . K_DIV xp_unary_expr  (49)
+	xp_multiplicative_expr : xp_multiplicative_expr . K_MOD xp_unary_expr  (50)
+
+	L_STAR  shift 89
+	K_DIV  shift 90
+	K_MOD  shift 91
+	L_COMMA  reduce 45
+	L_COLON  reduce 45
+	L_DAMPER  reduce 45
+	L_DEQUALS  reduce 45
+	L_DVBAR  reduce 45
+	L_EQUALS  reduce 45
+	L_GRTR  reduce 45
+	L_GRTREQ  reduce 45
+	L_LESS  reduce 45
+	L_LESSEQ  reduce 45
+	L_MINUS  reduce 45
+	L_NOTEQUALS  reduce 45
+	L_PLUS  reduce 45
+	L_QUESTION  reduce 45
+	L_UNDERSCORE  reduce 45
+	K_AND  reduce 45
+	K_OR  reduce 45
+	L_CBRACK  reduce 45
+	L_CPAREN  reduce 45
+
+
+state 120
+	xp_multiplicative_expr : xp_multiplicative_expr L_STAR xp_unary_expr .  (48)
+
+	.  reduce 48
+
+
+state 121
+	xp_multiplicative_expr : xp_multiplicative_expr K_DIV xp_unary_expr .  (49)
+
+	.  reduce 49
+
+
+state 122
+	xp_multiplicative_expr : xp_multiplicative_expr K_MOD xp_unary_expr .  (50)
+
+	.  reduce 50
+
+
+state 123
+	xpc_function_call : T_FUNCTION_NAME L_OPAREN xpc_argument_list_optional L_CPAREN .  (55)
+
+	.  reduce 55
+
+
+state 124
+	xpc_argument_list : xpc_argument_list L_COMMA . xpc_argument  (59)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xpath_value  goto 92
+	xpath_expression  goto 93
+	xp_expr  goto 94
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_ternary_expr  goto 38
+	xp_or_expr  goto 39
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_and_expr  goto 41
+	xp_equality_expr  goto 42
+	xp_relational_expr  goto 43
+	xp_concative_expr  goto 44
+	xp_additive_expr  goto 45
+	xp_multiplicative_expr  goto 46
+	xp_unary_expr  goto 47
+	xpc_argument  goto 132
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 125
+	xpc_predicate : L_OBRACK xpath_expression L_CBRACK .  (66)
+
+	.  reduce 66
+
+
+state 126
+	xpc_literal_optional : xpc_literal .  (76)
+
+	.  reduce 76
+
+
+state 127
+	xpc_node_test : K_PROCESSING_INSTRUCTION L_OPAREN xpc_literal_optional . L_CPAREN  (81)
+
+	L_CPAREN  shift 133
+	.  error
+
+
+state 128
+	xpc_predicate_list : xpc_predicate_list xpc_predicate .  (65)
+
+	.  reduce 65
+
+
+state 129
+	xpc_node_test : xpc_node_type L_OPAREN L_CPAREN .  (80)
+
+	.  reduce 80
+
+
+state 130
+	xp_ternary_expr : xp_or_expr L_QUESTION L_COLON xp_ternary_expr .  (19)
+
+	.  reduce 19
+
+
+state 131
+	xp_ternary_expr : xp_or_expr L_QUESTION xp_or_expr L_COLON . xp_ternary_expr  (18)
+	xpc_axis_specifier_optional : .  (61)
+
+	L_AT  shift 1
+	L_DOTDOT  shift 2
+	L_DSLASH  shift 3
+	L_MINUS  shift 35
+	L_NOT  shift 4
+	L_OPAREN  shift 5
+	L_SLASH  shift 6
+	L_DOT  shift 7
+	T_AXIS_NAME  shift 8
+	T_FUNCTION_NAME  shift 9
+	T_NUMBER  shift 10
+	T_QUOTED  shift 11
+	T_VAR  shift 12
+	K_COMMENT  reduce 61
+	K_NODE  reduce 61
+	K_PROCESSING_INSTRUCTION  reduce 61
+	K_TEXT  reduce 61
+	L_ASTERISK  reduce 61
+	T_BARE  reduce 61
+
+	xp_union_expr  goto 37
+	xp_location_path  goto 16
+	xpc_relative_location_path  goto 17
+	xp_absolute_location_path  goto 18
+	xpc_abbreviated_absolute_location_path  goto 19
+	xp_ternary_expr  goto 134
+	xp_or_expr  goto 39
+	xp_primary_expr  goto 20
+	xpc_variable_reference  goto 21
+	xpc_literal  goto 22
+	xpc_number  goto 23
+	xpc_function_call  goto 24
+	xp_not_expr  goto 25
+	xp_path_expr  goto 26
+	xp_filter_expr  goto 27
+	xp_and_expr  goto 41
+	xp_equality_expr  goto 42
+	xp_relational_expr  goto 43
+	xp_concative_expr  goto 44
+	xp_additive_expr  goto 45
+	xp_multiplicative_expr  goto 46
+	xp_unary_expr  goto 47
+	xpc_axis_specifier_optional  goto 28
+	xpc_abbreviated_axis_specifier  goto 29
+	xpc_step  goto 30
+	xpc_abbreviated_relative_location_path  goto 31
+	xpc_abbreviated_step  goto 32
+
+
+state 132
+	xpc_argument_list : xpc_argument_list L_COMMA xpc_argument .  (59)
+
+	.  reduce 59
+
+
+state 133
+	xpc_node_test : K_PROCESSING_INSTRUCTION L_OPAREN xpc_literal_optional L_CPAREN .  (81)
+
+	.  reduce 81
+
+
+state 134
+	xp_ternary_expr : xp_or_expr L_QUESTION xp_or_expr L_COLON xp_ternary_expr .  (18)
+
+	.  reduce 18
+
+
+128 terminals, 48 nonterminals
+96 grammar rules, 135 states
